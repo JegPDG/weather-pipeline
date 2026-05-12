@@ -1,8 +1,12 @@
 import pandas as pd
 from datetime import timedelta
+import os
 
 # CSV file path
 csv_path_clean = 'csv_files/api_data_clean.csv' 
+csv_path_daily_summary = 'csv_files/daily_summary.csv'
+csv_path_hourly_summary = 'csv_files/hourly_summary.csv'
+
 
 # Load the data
 df = pd.read_csv(csv_path_clean)
@@ -44,7 +48,21 @@ recent_7_days = recent_days[
     (recent_days.index >= last_7_days)
 ]
 
+recent_7_days['avg_temp_7_days'] = recent_7_days['avg_temp'].mean(numeric_only=True)
+
+recent_7_days['temp_rise'] = recent_7_days['temp_diff_frm_day_before'].mean(numeric_only=True)
+
+# recent_7_days['hottest_day'] = recent_7_days['avg_temp'].idxmax()
+
+# recent_7_days['hottest_hour'] = recent_7_days['avg_temp'].max()
+
+# recent_7_days['hottest_day'] = recent_7_days['avg_temp'].idxmax()
+
+# recent_7_days['hottest_hour'] = recent_7_days['avg_temp'].max()
+
 print(recent_7_days)
+# df.to_csv(csv_path_daily_summary, mode='a', index=False, header=not os.path.exists(csv_path_daily_summary))
+
 
 # average_temp = recent_7_days['temperature_c'].mean()
 # hottest_day = recent_7_days['temperature_c'].idxmax()
@@ -65,6 +83,8 @@ group_by_hour = df.groupby('hour').agg(
 ).round(2)
 
 print(group_by_hour)
+# df.to_csv(csv_path_hourly_summary, mode='a', index=False, header=not os.path.exists(csv_path_hourly_summary))
+
 
 # # Hottest hour of the day 
 # hottest_temp_by_hour = group_by_hour['temperature_c'].max().round(2)
