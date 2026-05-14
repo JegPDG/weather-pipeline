@@ -27,7 +27,8 @@ group_by_day = df.groupby('day').agg(
   avg_temp=('temperature_c', 'mean'),
   min_temp=('temperature_c', 'min'),
   max_temp=('temperature_c', 'max')
-).sort_index(ascending=False)
+).sort_index(ascending=True)
+
 
 
 # Getting today date
@@ -52,23 +53,14 @@ recent_7_days['avg_temp_7_days'] = recent_7_days['avg_temp'].mean(numeric_only=T
 
 recent_7_days['temp_rise'] = recent_7_days['temp_diff_frm_day_before'].mean(numeric_only=True)
 
-# recent_7_days['hottest_day'] = recent_7_days['avg_temp'].idxmax()
-
-# recent_7_days['hottest_hour'] = recent_7_days['avg_temp'].max()
-
-# recent_7_days['hottest_day'] = recent_7_days['avg_temp'].idxmax()
-
-# recent_7_days['hottest_hour'] = recent_7_days['avg_temp'].max()
-
 print(recent_7_days)
-# df.to_csv(csv_path_daily_summary, mode='a', index=False, header=not os.path.exists(csv_path_daily_summary))
+
+# Turn back index into a date 
+recent_7_days = recent_7_days.reset_index()
+
+recent_7_days.to_csv(csv_path_daily_summary, index=False)
 
 
-# average_temp = recent_7_days['temperature_c'].mean()
-# hottest_day = recent_7_days['temperature_c'].idxmax()
-# hottest_temp = recent_7_days['temperature_c'].max().round(2)
-# coldest_day = recent_7_days['temperature_c'].idxmin()
-# coldest_temp = recent_7_days['temperature_c'].min().round(2)
 
 # # //////////////////////// GROUPED BY HOUR ///////////////////////
 
@@ -83,33 +75,12 @@ group_by_hour = df.groupby('hour').agg(
 ).round(2)
 
 print(group_by_hour)
-# df.to_csv(csv_path_hourly_summary, mode='a', index=False, header=not os.path.exists(csv_path_hourly_summary))
+
+# Turn back index into a date 
+group_by_hour = group_by_hour.reset_index()
+
+group_by_hour.to_csv(csv_path_hourly_summary, index=False)
 
 
-# # Hottest hour of the day 
-# hottest_temp_by_hour = group_by_hour['temperature_c'].max().round(2)
-# hottest_hour = group_by_hour['temperature_c'].idxmax()
-# coldest_temp_by_hour = group_by_hour['temperature_c'].min().round(2)
-# coldest_hour = group_by_hour['temperature_c'].idxmin()
-
-
-# print(f"""
-#   Table 1: The average temperature per day in Aklan
-#   {avg_temp_per_day}
-
-#   Average temperature in the last 7 days: {average_temp}
-#   Hottest day in the last 7 days: {hottest_day} with a temperature of {hottest_temp}
-#   Coldest day in the last 7 days: {coldest_day} with a temperature of {coldest_temp}
-
-#   """)
-
-# print(f""" 
-#   Table 2: Group by hour
-  
-
-#   Hottest hour of the day: {hottest_temp_by_hour} at hour {hottest_hour}:00
-#   Coldest hour of the day: {coldest_temp_by_hour} at hour {coldest_hour}:00
-
-# """)
 
 
