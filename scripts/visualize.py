@@ -5,7 +5,7 @@ import pandas as pd
 csv_path_daily_summary = 'csv_files/daily_summary.csv'
 csv_path_hourly_summary = 'csv_files/hourly_summary.csv'
 
-# DAILY TREND  
+# DAILY TREND  ----------------------------------------------------------------------------------
 
 # Reading THe CSV file for Daily Summary 
 dly_df = pd.read_csv(csv_path_daily_summary)
@@ -33,12 +33,40 @@ plt.ylabel('Average Temperature in °C', fontweight='bold')
 for i, v in enumerate(dly_y):
     plt.text(dly_x[i], v + 0.05, f"{v:.2f}°C", ha='center')
 
-# plt.savefig('charts/daily_trend.png')
+plt.savefig('charts/daily_trend.png')
 
-# plt.close()
+plt.close()
+
+# MIN AND MAXIMUM TEMPERATURE PER DAY ---------------------------------------------------------------------------------
+# Data for X axis
+dly_day_x = dly_x
+
+# Data 1 for y axis
+dly_max_1 = dly_df['max_temp']
+
+# Data 2 for y axis
+dly_min_1 = dly_df['min_temp']
+
+# Bigger figure
+plt.figure(figsize=(10, 7))
+
+plt.plot(dly_day_x, dly_max_1, label='Maximum Temperature', marker='o')
+plt.plot(dly_day_x, dly_min_1, label='Minimum Temperature',  marker='o')
+
+plt.xlabel('Days', fontsize=14, fontweight='bold')
+plt.ylabel('Temperature in °C', fontsize=14, fontweight='bold')
+plt.suptitle('Minimum and maximum Temperature', fontsize=16, fontweight='bold')
+plt.title('Temeperature range per day in the last & Days in Aklan')
+plt.legend() # Displays labels defined in plt.plot()
+
+plt.savefig('charts/min_max_trend.png')
+
+plt.show()
 
 
-#  NEXT TREND
+
+
+#  NEXT TREND HOURLY AVERAGE TEMPERATURE ---------------------------------------------------------------------------------
 
 # Reading the the hourly summary csv 
 hly_df = pd.read_csv(csv_path_hourly_summary)
@@ -64,8 +92,17 @@ plt.ylabel('Temperature in °C', fontweight='bold')
 
 plt.savefig('charts/hourly_trend.png')
 
-plt.close()
+# plt.close()
 
-plt.show()
-print(hly_df.info())
+
+
+
+
+
+
+
+
+# print(hly_df.info())
 # print(dly_df.info())
+
+

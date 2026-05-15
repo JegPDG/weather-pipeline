@@ -12,7 +12,10 @@ df["timestamp"] = pd.to_datetime(df["timestamp"])
 df["extracted_at"] = pd.to_datetime(df["extracted_at"])
 
 # Remove duplicates
-df = df.drop_duplicates()
+df = df.drop_duplicates(
+  subset=['timestamp'], 
+  keep='last'
+)
 
 
 print(df.head())

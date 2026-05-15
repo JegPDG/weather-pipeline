@@ -72,7 +72,6 @@ month = pd.Timestamp.now(tz='Asia/Manila').month
 
 monthly_df = df[df['timestamp'].dt.month == month ]
 
-print(monthly_df)
 group_by_hour = monthly_df.groupby('hour').agg(
   avg_temp=('temperature_c', 'mean'),
   min_temp=('temperature_c', 'min'),
