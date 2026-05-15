@@ -3,6 +3,9 @@ import pandas as pd
 
 # CSV path for the Daily Summary 
 csv_path_daily_summary = 'csv_files/daily_summary.csv'
+csv_path_hourly_summary = 'csv_files/hourly_summary.csv'
+
+# DAILY TREND  
 
 # Reading THe CSV file for Daily Summary 
 dly_df = pd.read_csv(csv_path_daily_summary)
@@ -11,21 +14,58 @@ dly_df = pd.read_csv(csv_path_daily_summary)
 dly_df['day'] = pd.to_datetime(dly_df['day'])
 
 dly_x = dly_df['day'].dt.strftime('%b %d')
-dly_y = dly_df['avg_temp']
+dly_y = dly_df['avg_temp'].round(2)
 
 # Bigger figure
-plt.figure(figsize=(10, 5))
+plt.figure(figsize=(10, 7))
 
 # Plotting the table 
 plt.plot(dly_x, dly_y, marker = 'o')
 
 
 # Graph labels 
-plt.title('Daily Summary')
-plt.xlabel('Days')
-plt.ylabel('Average Temperature')
+plt.suptitle('Average Temperature in Aklan', fontsize=16, fontweight='bold')
+plt.title('Over the course of the last 7 days', fontsize=12)
+plt.xlabel('Days', fontweight='bold')
+plt.ylabel('Average Temperature in °C', fontweight='bold')
 
-# Show Plotting 
+# Label for each plot 
+for i, v in enumerate(dly_y):
+    plt.text(dly_x[i], v + 0.05, f"{v:.2f}°C", ha='center')
+
+# plt.savefig('charts/daily_trend.png')
+
+# plt.close()
+
+
+#  NEXT TREND
+
+# Reading the the hourly summary csv 
+hly_df = pd.read_csv(csv_path_hourly_summary)
+
+hly_x = hly_df['hour']
+hly_y = hly_df['avg_temp']
+
+# Bigger figure
+plt.figure(figsize=(10, 7))
+
+plt.bar(hly_x, hly_y)
+
+# Labels 
+month = pd.Timestamp.now(tz='Asia/Manila').month_name()
+
+plt.suptitle('Hourly Average Temperature in Aklan', fontweight='bold', fontsize=16)
+plt.title(f"In the month of {month}")
+plt.xlabel("Hour", fontweight='bold')
+plt.ylabel('Temperature in °C', fontweight='bold')
+
+# for i, v in enumerate(hly_y):
+#     plt.text(hly_x[i], v + 0.05, f"{v:.2f}")
+
+plt.savefig('charts/hourly_trend.png')
+
+plt.close()
+
 plt.show()
-
-print(dly_df.info())
+print(hly_df.info())
+# print(dly_df.info())

@@ -12,7 +12,7 @@ csv_path_hourly_summary = 'csv_files/hourly_summary.csv'
 df = pd.read_csv(csv_path_clean)
 
 # Convert str date times into a Date Time data type
-df["timestamp"] = pd.to_datetime(df["timestamp"])
+df["timestamp"] = pd.to_datetime(df["timestamp"]).dt.tz_localize("UTC").dt.tz_convert("Asia/Manila")
 df["extracted_at"] = pd.to_datetime(df["extracted_at"])
 
 # Create a new column for day and hour
@@ -32,7 +32,7 @@ group_by_day = df.groupby('day').agg(
 
 
 # Getting today date
-today = pd.Timestamp.today().normalize()
+today = pd.Timestamp.now(tz='Asia/Manila').normalize()
 
 #  Group by day in the recently
 recent_days = group_by_day[group_by_day.index <= today]
@@ -67,18 +67,26 @@ recent_7_days.to_csv(csv_path_daily_summary, index=False)
 # # Group by hour 
 df['hour'] = df['hour'].dt.hour
 
-group_by_hour = df.groupby('hour').agg(
+# Only get the month
+month = pd.Timestamp.now(tz='Asia/Manila').month
+
+monthly_df = df[df['timestamp'].dt.month == month ]
+
+print(monthly_df)
+group_by_hour = monthly_df.groupby('hour').agg(
   avg_temp=('temperature_c', 'mean'),
   min_temp=('temperature_c', 'min'),
   max_temp=('temperature_c', 'max'),
 
 ).round(2)
 
+
 print(group_by_hour)
 
 # Turn back index into a date 
 group_by_hour = group_by_hour.reset_index()
 
+# Save into a csv 
 group_by_hour.to_csv(csv_path_hourly_summary, index=False)
 
 
